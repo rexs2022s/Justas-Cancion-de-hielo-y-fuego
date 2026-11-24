@@ -1,0 +1,1735 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guerra Fría de Poniente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Almendra:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Colores: claro por defecto, oscuro según el visor ---------- */
+  :root {
+    --fondo: #E8EFF3;
+    --panel: #F7FAFB;
+    --linea: #B4C6D1;
+    --texto: #15212B;
+    --tenue: #4E6577;
+    --hielo: #215C7A;
+    --sobre-hielo: #FFFFFF;
+    --humillacion: #A93C37;
+    --fallo: #A05A12;
+    --exito: #2F7F52;
+    --critico: #8A6B0F;
+    --sobre-zona: #FFFFFF;
+
+    --display: "Almendra", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    --cuerpo: "Alegreya Sans", "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fondo: #131C24;
+      --panel: #1C2A35;
+      --linea: #35495A;
+      --texto: #E4EDF2;
+      --tenue: #93A9B8;
+      --hielo: #A9D2E6;
+      --sobre-hielo: #10181F;
+      --humillacion: #D2625B;
+      --fallo: #D8934A;
+      --exito: #5FB07F;
+      --critico: #E3C25C;
+      --sobre-zona: #10181F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --fondo: #131C24;
+    --panel: #1C2A35;
+    --linea: #35495A;
+    --texto: #E4EDF2;
+    --tenue: #93A9B8;
+    --hielo: #A9D2E6;
+    --sobre-hielo: #10181F;
+    --humillacion: #D2625B;
+    --fallo: #D8934A;
+    --exito: #5FB07F;
+    --critico: #E3C25C;
+    --sobre-zona: #10181F;
+  }
+
+  *, *::before, *::after { box-sizing: inherit; }
+  html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    height: 100%;
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: var(--cuerpo);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+  }
+  #app { min-height: 100%; }
+
+  .z-humillacion { --zona: var(--humillacion); }
+  .z-fallo       { --zona: var(--fallo); }
+  .z-exito       { --zona: var(--exito); }
+  .z-critico     { --zona: var(--critico); }
+
+  .solo-lector {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
+  }
+
+  /* ---------- Pantallas ---------- */
+  .pantalla {
+    max-width: 64rem;
+    margin: 0 auto;
+    padding: clamp(1.25rem, 4vw, 3rem) clamp(1rem, 4vw, 2.5rem);
+  }
+  [hidden] { display: none !important; }
+  h1, h2, h3, p { margin: 0; }
+  h1:focus, h2:focus { outline: none; }
+
+  /* ---------- Botones ---------- */
+  button { font-family: var(--cuerpo); }
+  button:focus-visible { outline: 3px solid var(--texto); outline-offset: 3px; }
+
+  .boton {
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1;
+    padding: 0.95rem 1.6rem;
+    border: 0;
+    border-radius: 3px;
+    background: var(--hielo);
+    color: var(--sobre-hielo);
+    cursor: pointer;
+  }
+  .boton:hover { filter: brightness(1.08); }
+  .boton[disabled] { opacity: 0.55; cursor: default; filter: none; }
+
+  .boton-suave {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    background: transparent;
+    color: var(--texto);
+    cursor: pointer;
+  }
+  .boton-suave:hover { border-color: var(--hielo); }
+  .boton-suave[disabled] { opacity: 0.45; cursor: default; }
+
+  /* ---------- Portada ---------- */
+  #portada {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .titulo {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 11vw, 6.5rem);
+    line-height: 0.98;
+    letter-spacing: 0.01em;
+  }
+  .titulo span { display: block; }
+
+  .regla {
+    display: grid;
+    grid-template-columns: repeat(21, minmax(0, 1fr));
+    gap: clamp(3px, 1vw, 9px);
+    width: min(100%, 38rem);
+    height: 1.75rem;
+    margin-top: clamp(1.25rem, 3vw, 2rem);
+  }
+  .regla i {
+    display: block;
+    background: var(--zona);
+    transform-origin: bottom;
+    animation: crecer 0.45s cubic-bezier(.2,.7,.2,1) both;
+    animation-delay: calc(var(--i) * 45ms);
+  }
+  @keyframes crecer { from { transform: scaleY(0); } }
+
+  .autor {
+    margin-top: 1rem;
+    font-size: 1.125rem;
+    color: var(--tenue);
+  }
+  #portada .boton {
+    margin-top: clamp(1.75rem, 5vw, 3rem);
+    font-size: 1.25rem;
+    padding: 1.05rem 2rem;
+  }
+
+  /* ---------- Elegir casa ---------- */
+  .encabezado-casas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem 1rem;
+  }
+  .encabezado-casas h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 6vw, 3rem);
+    line-height: 1.05;
+  }
+  .encabezado-casas p { margin-top: 0.4rem; color: var(--tenue); }
+
+  .casas {
+    list-style: none;
+    margin: clamp(1.25rem, 3vw, 2rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9.25rem, 1fr));
+    gap: 0.5rem;
+  }
+  .casa {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem;
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    color: var(--texto);
+    font-weight: 500;
+    font-size: 1.0625rem;
+    line-height: 1.2;
+    text-align: left;
+    cursor: pointer;
+  }
+  .casa:hover { border-color: var(--hielo); }
+  .casa .emoji { flex: none; font-size: 1.45rem; line-height: 1; }
+
+  /* ---------- La acción: contexto y cantidades ---------- */
+  #accion { max-width: 54rem; }
+
+  .cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--linea);
+  }
+  .mi-casa {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+    line-height: 1.1;
+  }
+
+  .papel { margin-bottom: 0.15rem; color: var(--tenue); font-weight: 500; font-size: 1rem; }
+
+  .bloque { margin-top: clamp(1.5rem, 4vw, 2.25rem); }
+  .bloque > h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.35rem, 4.5vw, 1.7rem);
+    line-height: 1.15;
+  }
+  .ayuda { margin-top: 0.3rem; color: var(--tenue); max-width: 62ch; }
+
+  #contexto {
+    display: block;
+    width: 100%;
+    min-height: 9.5rem;
+    margin-top: 0.85rem;
+    padding: 0.85rem 0.9rem;
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    color: var(--texto);
+    font-family: var(--cuerpo);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    resize: vertical;
+  }
+  #contexto::placeholder, .cosa input::placeholder { color: var(--tenue); opacity: 0.75; }
+  #contexto:focus-visible, .cosa input:focus-visible {
+    outline: 3px solid var(--hielo);
+    outline-offset: 1px;
+  }
+
+  .contexto-leido {
+    margin-top: 0.85rem;
+    padding: 0.85rem 0.9rem 0.85rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-left: 4px solid var(--hielo);
+    border-radius: 3px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .contexto-leido.sin-contexto { color: var(--tenue); border-left-color: var(--linea); }
+
+  .pie {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  }
+  .pie .boton { flex: 1 1 100%; padding: 1.1rem; font-size: 1.2rem; }
+
+  .grupo { margin-top: 1.35rem; }
+  .grupo h4 {
+    margin: 0 0 0.5rem;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.3;
+    color: var(--tenue);
+  }
+  .cosas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 0.5rem;
+  }
+  .cosa {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) 6.75rem;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.5rem 0.45rem 0.75rem;
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+  }
+  .cosa.con-cantidad { border-color: var(--hielo); }
+  .cosa .emoji { font-size: 1.35rem; line-height: 1; }
+  .cosa label { font-weight: 500; line-height: 1.2; overflow-wrap: anywhere; }
+  .cosa input {
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    background: var(--fondo);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    color: var(--texto);
+    font-family: var(--cuerpo);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    line-height: 1.2;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Bestias (dragones y gusanos de fuego) ---------- */
+  select {
+    padding: 0.5rem 0.6rem;
+    background: var(--fondo);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    color: var(--texto);
+    font-family: var(--cuerpo);
+    font-size: 1rem;
+    line-height: 1.2;
+    max-width: 100%;
+  }
+  select:focus-visible { outline: 3px solid var(--hielo); outline-offset: 1px; }
+
+  .bestias { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+  .bestia {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.5rem 0.45rem 0.75rem;
+    background: var(--panel);
+    border: 1px solid var(--hielo);
+    border-radius: 3px;
+  }
+  .bestia .b-nombre { display: flex; align-items: center; gap: 0.6rem; font-weight: 500; }
+  .bestia .emoji { font-size: 1.35rem; line-height: 1; }
+  .sin-bestias { color: var(--tenue); }
+  .bestias-botones { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+  .grupo .ayuda { font-size: 0.95rem; margin-top: 0.5rem; }
+
+  /* ---------- Cálculo de ventajas ---------- */
+  #calculo { max-width: 54rem; }
+  .enfrentamiento {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.2rem, 4.5vw, 1.6rem);
+    line-height: 1.3;
+  }
+
+  .opciones { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+  .opcion { position: relative; }
+  .opcion input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .opcion span {
+    display: block;
+    padding: 0.65rem 0.9rem;
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .opcion input:checked + span {
+    background: var(--hielo);
+    border-color: var(--hielo);
+    color: var(--sobre-hielo);
+    font-weight: 700;
+  }
+  .opcion input:focus-visible + span { outline: 3px solid var(--texto); outline-offset: 2px; }
+  .subtitulo {
+    margin: 1.25rem 0 0;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.3;
+    color: var(--tenue);
+  }
+
+  .fuerzas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.85rem;
+  }
+  .fuerza {
+    padding: 0.9rem 1rem;
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+  }
+  .fuerza h4 { margin: 0; font-weight: 500; font-size: 1rem; line-height: 1.3; color: var(--tenue); }
+  .grande {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 7vw, 2.75rem);
+    line-height: 1.15;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .desglose { list-style: none; margin: 0.6rem 0 0; padding: 0; font-size: 0.95rem; line-height: 1.35; }
+  .desglose li {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.35rem 0;
+    border-top: 1px solid var(--linea);
+  }
+  .desglose .valor { font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .nota { margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.35; color: var(--tenue); }
+  .resumen-linea { margin-top: 0.85rem; font-weight: 500; }
+
+  .condiciones { list-style: none; margin: 0.5rem 0 0; padding: 0; display: grid; gap: 0.4rem; }
+  .condicion {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
+    padding: 0.45rem 0.5rem 0.45rem 0.75rem;
+    background: var(--panel);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+  }
+  .condicion.activa { border-color: var(--hielo); }
+  .condicion .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .chip {
+    padding: 0.55rem 0.8rem;
+    background: var(--fondo);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    color: var(--texto);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .chip:hover { border-color: var(--hielo); }
+  .chip[aria-pressed="true"] {
+    background: var(--hielo);
+    border-color: var(--hielo);
+    color: var(--sobre-hielo);
+  }
+
+  .total { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1rem; margin-top: 0.4rem; }
+  .total .grande { font-size: clamp(3rem, 12vw, 4.5rem); line-height: 1; }
+  .total p { color: var(--tenue); }
+
+  /* ---------- El dado ---------- */
+  #dado { max-width: 44rem; }
+  .mod-linea { margin-top: 1rem; font-weight: 500; }
+
+  .resultado {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(1rem, 4vw, 2rem);
+    padding: 1.5rem 0;
+  }
+  .numero {
+    min-width: 2ch;
+    text-align: center;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(4.5rem, 20vw, 7.5rem);
+    line-height: 0.9;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .veredicto {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    line-height: 1.1;
+    color: var(--zona, var(--texto));
+  }
+  .detalle { margin-top: 0.35rem; color: var(--tenue); max-width: 38ch; }
+  .con-que { font-size: 0.95rem; line-height: 1.4; min-height: 2.8em; }
+
+  /* Pila: todos los textos posibles ocupan el mismo hueco y solo se ve uno,
+     así la pantalla no salta de una tirada a otra */
+  .pila { display: grid; }
+  .pila > * { grid-area: 1 / 1; visibility: hidden; }
+  .pila > .visible { visibility: visible; }
+
+  /* La barra del 0 al 20 con los cuatro resultados */
+  .pista {
+    display: grid;
+    grid-template-columns: repeat(21, minmax(0, 1fr));
+    gap: 2px;
+    padding: 0.5rem 0;
+  }
+  .celda {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1 / 1.6;
+    background: var(--panel);
+    background: color-mix(in srgb, var(--zona) 26%, var(--panel));
+    border-bottom: 3px solid var(--zona);
+    border-radius: 2px;
+    color: var(--texto);
+    font-weight: 700;
+    font-size: clamp(0.6rem, 2.5vw, 0.9rem);
+    line-height: 1;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
+  }
+  .celda.aqui {
+    background: var(--zona);
+    color: var(--sobre-zona);
+    transform: scaleY(1.22);
+  }
+
+  .leyenda {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.4rem 1rem;
+    font-size: 0.95rem;
+    line-height: 1.3;
+  }
+  .leyenda li { display: flex; align-items: baseline; gap: 0.45rem; }
+  .leyenda li::before {
+    content: "";
+    flex: none;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 2px;
+    background: var(--zona);
+  }
+  .leyenda b { font-weight: 700; }
+  .leyenda span { color: var(--tenue); white-space: nowrap; }
+
+  #tirar {
+    display: block;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 1.15rem;
+    font-size: 1.3rem;
+  }
+
+  .perdida-pct { font-family: var(--display); font-weight: 700; font-size: clamp(1.5rem, 5vw, 1.9rem); line-height: 1.2; }
+
+  @media (max-width: 36rem) {
+    .fuerzas { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 30rem) {
+    .leyenda { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .resultado { row-gap: 0.75rem; }
+    .resultado-texto { display: contents; }
+    .resultado .detalle { grid-column: 1 / -1; margin-top: 0; max-width: none; }
+    .bestia { grid-template-columns: minmax(0, 1fr) auto; }
+    .bestia .b-nombre { grid-column: 1 / -1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .regla i { animation: none; }
+    .celda { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main id="app">
+
+  <!-- Portada -->
+  <section id="portada" class="pantalla">
+    <h1 class="titulo"><span>GUERRA FRÍA</span><span>DE PONIENTE</span></h1>
+    <div class="regla" id="regla" aria-hidden="true"></div>
+    <p class="autor">creado por Rex_2022</p>
+    <button class="boton" id="iniciar" type="button">▶ Iniciar</button>
+  </section>
+
+  <!-- Elegir casa (la que hace la acción o la defensora) -->
+  <section id="elegir" class="pantalla" hidden>
+    <div class="encabezado-casas">
+      <div>
+        <h2 id="titulo-elegir" tabindex="-1">Elige la casa</h2>
+        <p id="sub-elegir">La casa que hace la acción.</p>
+      </div>
+      <button class="boton-suave" id="volver-elegir" type="button" hidden>Volver</button>
+    </div>
+    <ul class="casas" id="casas"></ul>
+  </section>
+
+  <!-- Contexto y recursos de una casa -->
+  <section id="accion" class="pantalla" hidden>
+    <div class="cabecera">
+      <div>
+        <p class="papel" id="papel">Hace la acción</p>
+        <h2 class="mi-casa" id="mi-casa" tabindex="-1"></h2>
+      </div>
+      <button class="boton-suave" id="cambiar" type="button">Cambiar de casa</button>
+    </div>
+
+    <div class="bloque" id="bloque-escribir">
+      <h3><label for="contexto">Contexto de la situación</label></h3>
+      <p class="ayuda" id="contexto-ayuda">El objetivo concreto de la acción y sus condiciones: terreno, preparación, sorpresa, clima. Con esto el árbitro evalúa las ventajas.</p>
+      <textarea id="contexto" aria-describedby="contexto-ayuda" placeholder="Ejemplo: la casa quiere tomar el puente. Embosca de noche, por el bosque, a una guarnición que no la espera…"></textarea>
+    </div>
+
+    <div class="bloque" id="bloque-leer" hidden>
+      <h3>Contexto de la situación</h3>
+      <p class="ayuda" id="leer-ayuda"></p>
+      <div class="contexto-leido" id="contexto-leido"></div>
+    </div>
+
+    <div class="bloque">
+      <h3 id="titulo-cosas">Qué tiene en esta acción</h3>
+      <p class="ayuda" id="ayuda-cosas"></p>
+      <div id="grupos"></div>
+
+      <div class="grupo">
+        <h4>Bestias</h4>
+        <ul class="bestias" id="bestias"></ul>
+        <p class="sin-bestias" id="sin-bestias">Ninguna bestia en esta acción.</p>
+        <div class="bestias-botones">
+          <button class="boton-suave" id="mas-dragon" type="button">Añadir dragón</button>
+          <button class="boton-suave" id="mas-gusano" type="button">Añadir gusano de fuego</button>
+        </div>
+        <p class="ayuda">Las de nivel 0 no combaten, así que no se añaden.</p>
+      </div>
+    </div>
+
+    <div class="pie">
+      <button class="boton" id="seguir" type="button">Seguir a la casa defensora</button>
+      <button class="boton-suave" id="volver-accion" type="button" hidden></button>
+    </div>
+  </section>
+
+  <!-- Cálculo de ventajas -->
+  <section id="calculo" class="pantalla" hidden>
+    <div class="cabecera">
+      <h2 class="enfrentamiento" id="calc-titulo" tabindex="-1"></h2>
+      <button class="boton-suave" id="volver-calculo" type="button"></button>
+    </div>
+
+    <div class="bloque">
+      <h3 id="tipo-titulo">Tipo de acción</h3>
+      <p class="ayuda" id="tipo-ayuda"></p>
+      <div class="opciones" id="tipos" role="radiogroup" aria-labelledby="tipo-titulo"></div>
+      <div id="objetivo-caja" hidden>
+        <h4 class="subtitulo" id="objetivo-titulo">Objetivo del asedio</h4>
+        <div class="opciones" id="objetivos" role="radiogroup" aria-labelledby="objetivo-titulo"></div>
+      </div>
+    </div>
+
+    <div class="bloque">
+      <h3>Fuerza efectiva</h3>
+      <div class="fuerzas">
+        <div class="fuerza" id="fuerza-accion"></div>
+        <div class="fuerza" id="fuerza-defensa"></div>
+      </div>
+      <p class="resumen-linea" id="superioridad" aria-live="polite"></p>
+    </div>
+
+    <div class="bloque">
+      <h3>Condiciones del contexto</h3>
+      <p class="ayuda" id="cond-ayuda"></p>
+      <div class="contexto-leido" id="calc-contexto"></div>
+      <h4 class="subtitulo">A favor</h4>
+      <ul class="condiciones" id="cond-favor"></ul>
+      <h4 class="subtitulo">En contra</h4>
+      <ul class="condiciones" id="cond-contra"></ul>
+      <p class="resumen-linea" id="contexto-suma" aria-live="polite"></p>
+    </div>
+
+    <div class="bloque">
+      <h3>Modificador total</h3>
+      <div class="total" aria-live="polite">
+        <div class="grande" id="total-numero"></div>
+        <p id="total-detalle"></p>
+      </div>
+    </div>
+
+    <div class="pie">
+      <button class="boton" id="seguir-dado" type="button">Seguir al dado</button>
+    </div>
+  </section>
+
+  <!-- El dado -->
+  <section id="dado" class="pantalla" hidden>
+    <div class="cabecera">
+      <h2 class="enfrentamiento" id="dado-titulo" tabindex="-1"></h2>
+      <button class="boton-suave" id="volver-dado" type="button">Volver al cálculo</button>
+    </div>
+    <p class="mod-linea" id="mod-linea"></p>
+
+    <div class="resultado">
+      <div class="numero" id="dado-numero" aria-hidden="true">–</div>
+      <div class="resultado-texto">
+        <div class="veredicto pila" id="veredicto"></div>
+        <div class="detalle pila" id="detalle"></div>
+        <p class="detalle con-que" id="con-que"></p>
+      </div>
+    </div>
+    <p class="solo-lector" id="dado-anuncio" aria-live="polite"></p>
+
+    <div class="pista" id="pista" aria-hidden="true"></div>
+    <ul class="leyenda" id="leyenda"></ul>
+
+    <button class="boton" id="tirar" type="button">Tirar el dado</button>
+
+    <div class="bloque" id="perdidas" hidden>
+      <h3>Pérdidas sugeridas</h3>
+      <p class="ayuda" id="equivale"></p>
+      <div class="fuerzas">
+        <div class="fuerza" id="perd-accion"></div>
+        <div class="fuerza" id="perd-defensa"></div>
+      </div>
+      <p class="ayuda">Son una referencia para combate directo. En un sabotaje o una huida miden la intensidad del daño o del escape. El narrador las confirma o ajusta antes de descontar recursos.</p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  /* =====================================================================
+     VALORES DE BALANCE
+     Todo lo que el staff puede querer cambiar está aquí, en un solo sitio.
+     ===================================================================== */
+  var REGLAS = {
+    // Fuerza en tierra
+    soldado: 1,          // soldado con arma
+    mercenario: 5,       // un mercenario vale por 5 soldados
+    caballeria: 0.5,     // extra por caballo con jinete y montura
+    escudo: 0.2,         // extra por portador de escudo
+
+    // Bestias, por nivel (el nivel 0 no combate)
+    dragon: { 1: 300, 2: 900, 3: 2700, 4: 8100 },
+    gusano: { 1: 240, 2: 720, 3: 2160, 4: 6480 },
+    armadura: { ninguna: 0, plata: 5, oro: 10, valyrio: 20 },   // % de fuerza extra
+
+    // Máquinas: una columna según el tipo de acción
+    maquinas: {
+      "escorpion-mk1": { tierra: 100, vuelo: 150, estructura: 20 },
+      "escorpion-mk2": { tierra: 100, vuelo: 150, estructura: 20 },
+      "grifon-triple": { tierra: 60,  vuelo: 40,  estructura: 10 },
+      "bateria-canon": { tierra: 120, vuelo: 0,   estructura: 150 },
+      "catapulta":     { tierra: 80,  vuelo: 0,   estructura: 200 },
+      "trebuchet":     { tierra: 100, vuelo: 0,   estructura: 300 }
+    },
+
+    // Navíos: fuerza naval, y armas antidragón contra bestias en vuelo
+    barcos: {
+      "barco":         { naval: 50,   vuelo: 0 },
+      "bergantin":     { naval: 150,  vuelo: 40 },
+      "fragata":       { naval: 300,  vuelo: 0 },
+      "galeon":        { naval: 450,  vuelo: 0 },
+      "dreadnought":   { naval: 800,  vuelo: 300 },
+      "dreadnought-2": { naval: 1200, vuelo: 450 }
+    },
+
+    // Resistencia de los objetivos de asedio
+    objetivos: [
+      ["ligera", "Defensa ligera", 100],
+      ["puerta", "Puerta reforzada", 300],
+      ["muralla", "Sección de muralla", 600],
+      ["fortificada", "Sección especialmente fortificada", 1200]
+    ],
+
+    // Superioridad (%) -> modificador: menos de 25 = 0, menos de 50 = 1, ...
+    superioridad: [25, 50, 75, 100, 125],
+    sinOposicion: 5,
+    limiteContexto: 3,
+    limiteTotal: 8,
+
+    // Pérdidas sugeridas por resultado final (0 a 20): [propias %, enemigas %]
+    perdidas: [
+      [100, 0], [90, 0], [80, 0], [70, 5], [60, 5], [50, 5],
+      [40, 5], [35, 5], [30, 10], [25, 10], [20, 10],
+      [10, 20], [10, 25], [10, 30], [5, 40], [5, 50],
+      [5, 60], [5, 70], [0, 80], [0, 90], [0, 100]
+    ],
+    redondeoTropas: 5    // las bajas de tropa se redondean al múltiplo de 5
+  };
+
+  // Condiciones del contexto: [id, texto, valores posibles, etiquetas]
+  var CONDICIONES = [
+    ["terreno-favor", "Terreno o posición favorable", [1, 2]],
+    ["sorpresa", "Sorpresa confirmada", [2]],
+    ["oscuridad", "Oscuridad útil para ocultarse", [1]],
+    ["informacion", "Información útil y verificada", [1]],
+    ["preparacion", "Preparación específica", [1]],
+    ["movilidad", "Movilidad especialmente favorable", [1]],
+    ["fuego-salvaje", "Fuego salvaje para el objetivo", [1, 2], ["suficiente", "abundante"]],
+    ["resistencia-fuego", "Resistencia al fuego relevante", [1]],
+    ["terreno-contra", "Terreno desfavorable", [-1, -2]],
+    ["clima", "Clima adverso", [-1, -2]],
+    ["fatiga", "Fatiga o desorganización", [-1]],
+    ["maniobra", "Poca maniobrabilidad relevante", [-1]],
+    ["escolta", "Falta de escolta necesaria", [-1]]
+  ];
+
+  var TIPOS = [
+    ["tierra", "En tierra", "Contra tropas o bestias terrestres. Cuentan soldados con arma, mercenarios, caballería, escudos, máquinas y bestias."],
+    ["vuelo", "Contra bestias en vuelo", "Cuentan las máquinas que pueden apuntar al cielo, las armas antidragón de los barcos y las bestias."],
+    ["estructura", "Contra estructuras", "Cuentan las máquinas de asedio y las bestias de quien ataca, contra la resistencia del objetivo."],
+    ["naval", "Naval", "Cuentan los barcos, con su armamento ya incluido, y las bestias."]
+  ];
+
+  /* Casas disponibles, en el orden de los roles del server */
+  var CASAS = [
+    ["🦁", "Casa Lannister"],
+    ["🐺", "Casa Stark"],
+    ["🦌", "Casa Baratheon"],
+    ["🐉", "Casa Targaryen"],
+    ["🐎", "Dothraki"],
+    ["🌹", "Casa Tyrell"],
+    ["🐟", "Casa Tully"],
+    ["🦅", "Casa Arryn"],
+    ["🐙", "Casa Greyjoy"],
+    ["☀️", "Casa Martell"],
+    ["🏰", "Casa Hightower"],
+    ["🌊", "Casa Velaryon"],
+    ["⚓️", "Casa Greyjoy"],
+    ["🩸", "Casa Bolton"],
+    ["⭐️", "Casa Dayne"],
+    ["⚫️", "Casa FuegoOscuro"],
+    ["🌉", "Casa Frey"],
+    ["🕊️", "Casa Mallister"],
+    ["🐦‍⬛", "Casa Blackwood"],
+    ["🔸", "Casa Bracken"],
+    ["🏹", "Casa Tarly"],
+    ["🍇", "Casa Redwyne"],
+    ["🧜‍♂️", "Casa Manderly"],
+    ["⚡️", "Casa Dondarrion"],
+    ["🐻", "Casa Mormont"]
+  ];
+  /* Cosas de la tienda que una casa puede llevar a una acción */
+  var GRUPOS = [
+    ["Tropas y equipo", [
+      ["soldado", "🪖", "Soldado"],
+      ["mercenarios", "🥷", "Mercenarios"],
+      ["caballos", "🐴", "Caballos"],
+      ["montura-caballo", "🏇", "Montura de caballo"],
+      ["armas", "⚔️", "Armas"],
+      ["escudo", "🛡️", "Escudo"],
+      ["comida", "🥩", "Comida"]
+    ]],
+    ["Asedio", [
+      ["grifon-triple", "🏹", "Grifón triple"],
+      ["catapulta", "🗯️", "Catapulta"],
+      ["trebuchet", "💥", "Trebuchet doble"],
+      ["bateria-canon", "💣", "Batería de cañón"],
+      ["escorpion-mk1", "🦂", "Escorpión MK-1"],
+      ["escorpion-mk2", "🦂", "Escorpión MK-2"],
+      ["fuego-valyrio", "🔥", "Fuego Valyrio"]
+    ]],
+    ["Naval", [
+      ["barco", "⛴️", "Barco común"],
+      ["bergantin", "⛴️", "Bergantín 2.0"],
+      ["fragata", "🛳️", "Fragata"],
+      ["galeon", "⛴️", "Galeón"],
+      ["dreadnought", "🛳️", "Dreadnought de tercera"],
+      ["dreadnought-2", "🛳️", "Dreadnought de segunda"]
+    ]],
+    ["Objetos de dragón", [
+      ["huevo-dragon", "🥚", "Huevo de dragón"],
+      ["comida-dragon", "🐉", "Comida de dragón"],
+      ["montura-dragon", "🐲", "Montura de dragón"]
+    ]]
+  ];
+  var NOMBRE = {};
+  GRUPOS.forEach(function (g) { g[1].forEach(function (c) { NOMBRE[c[0]] = c[2]; }); });
+
+  var ARMADURAS = [
+    ["ninguna", "Sin armadura"],
+    ["plata", "Plata (+5 %)"],
+    ["oro", "Oro (+10 %)"],
+    ["valyrio", "Acero valyrio (+20 %)"]
+  ];
+  var ARMADURA_TEXTO = { plata: "plata", oro: "oro", valyrio: "acero valyrio" };
+
+  /* ---------- Estado ---------- */
+  // Hay dos bandos: "accion" (la casa que actúa) y "defensa" (la defensora)
+  var modo = "accion";
+  var casa = { accion: -1, defensa: -1 };
+  var datos = { accion: {}, defensa: {} };   // por bando y casa: { contexto, cantidades, bestias }
+  var calculo = { tipo: "tierra", objetivo: "ligera", condiciones: {} };
+  var campos = {};                           // id -> { input, fila }
+
+  function $(id) { return document.getElementById(id); }
+
+  function crear(etiqueta, clase, texto) {
+    var e = document.createElement(etiqueta);
+    if (clase) e.className = clase;
+    if (texto !== undefined) e.textContent = texto;
+    return e;
+  }
+
+  function mostrar(id, foco) {
+    ["portada", "elegir", "accion", "calculo", "dado"].forEach(function (p) {
+      $(p).hidden = (p !== id);
+    });
+    window.scrollTo(0, 0);
+    if (foco) foco.focus();
+  }
+
+  function datosDe(bando, idx) {
+    if (!datos[bando][idx]) datos[bando][idx] = { contexto: "", cantidades: {}, bestias: [] };
+    return datos[bando][idx];
+  }
+
+  function nombreCasa(idx) { return CASAS[idx][0] + " " + CASAS[idx][1]; }
+
+  // 2700 -> "2.700", 60.5 -> "60,5"
+  function fmt(n) {
+    var r = Math.round(Math.abs(n) * 10) / 10;
+    var ent = Math.floor(r);
+    var dec = Math.round((r - ent) * 10);
+    var s = String(ent).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return (n < 0 ? "−" : "") + s + (dec ? "," + dec : "");
+  }
+  function conSigno(n) { return n > 0 ? "+" + n : (n < 0 ? "−" + Math.abs(n) : "0"); }
+
+  /* ---------- Portada: la regla de 0 a 20 con los cuatro resultados ---------- */
+  (function () {
+    var regla = $("regla");
+    for (var n = 0; n <= 20; n++) {
+      var i = document.createElement("i");
+      i.className = "z-" + zonaDe(n);
+      i.style.setProperty("--i", n);
+      regla.appendChild(i);
+    }
+  })();
+
+  $("iniciar").addEventListener("click", function () { abrirSelector("accion"); });
+
+  /* ---------- Elegir casa ---------- */
+  (function () {
+    var ul = $("casas");
+    CASAS.forEach(function (c, idx) {
+      var li = document.createElement("li");
+      var b = crear("button", "casa");
+      b.type = "button";
+      var e = crear("span", "emoji", c[0]);
+      e.setAttribute("aria-hidden", "true");
+      b.appendChild(e);
+      b.appendChild(crear("span", "", c[1]));
+      b.addEventListener("click", function () { elegir(idx); });
+      li.appendChild(b);
+      ul.appendChild(li);
+    });
+  })();
+
+  function abrirSelector(bando) {
+    modo = bando;
+    if (bando === "defensa") {
+      $("titulo-elegir").textContent = "Elige la casa defensora";
+      $("sub-elegir").textContent = "La casa que se defiende de " + nombreCasa(casa.accion) + ".";
+      $("volver-elegir").textContent = "Volver a " + nombreCasa(casa.accion);
+      $("volver-elegir").hidden = false;
+    } else {
+      $("titulo-elegir").textContent = "Elige la casa";
+      $("sub-elegir").textContent = "La casa que hace la acción.";
+      $("volver-elegir").hidden = true;
+    }
+    mostrar("elegir", $("titulo-elegir"));
+  }
+
+  function elegir(idx) {
+    casa[modo] = idx;
+    abrirBando(modo);
+  }
+
+  $("volver-elegir").addEventListener("click", function () { abrirBando("accion"); });
+
+  /* ---------- Campos de cantidad ---------- */
+  (function () {
+    var cont = $("grupos");
+    GRUPOS.forEach(function (g) {
+      var caja = crear("div", "grupo");
+      caja.appendChild(crear("h4", "", g[0]));
+      var ul = crear("ul", "cosas");
+
+      g[1].forEach(function (c) {
+        var id = c[0];
+        var li = crear("li", "cosa");
+        var e = crear("span", "emoji", c[1]);
+        e.setAttribute("aria-hidden", "true");
+        var l = crear("label", "", c[2]);
+        l.htmlFor = "cant-" + id;
+
+        var inp = document.createElement("input");
+        inp.type = "number";
+        inp.id = "cant-" + id;
+        inp.min = "0";
+        inp.step = "1";
+        inp.inputMode = "numeric";
+        inp.placeholder = "0";
+        inp.addEventListener("input", function () { guardarCantidad(id); });
+        inp.addEventListener("blur", function () { limpiarCampo(id); });
+
+        li.appendChild(e);
+        li.appendChild(l);
+        li.appendChild(inp);
+        ul.appendChild(li);
+        campos[id] = { input: inp, fila: li };
+      });
+
+      caja.appendChild(ul);
+      cont.appendChild(caja);
+    });
+  })();
+
+  function leerCantidad(texto) {
+    var n = Math.floor(Number(texto));
+    return (isFinite(n) && n > 0) ? n : 0;
+  }
+
+  function guardarCantidad(id) {
+    if (casa[modo] < 0) return;
+    var n = leerCantidad(campos[id].input.value);
+    var d = datosDe(modo, casa[modo]);
+    if (n > 0) d.cantidades[id] = n; else delete d.cantidades[id];
+    campos[id].fila.classList.toggle("con-cantidad", n > 0);
+  }
+
+  function limpiarCampo(id) {
+    // Deja el campo con el número entero guardado, o vacío si es cero
+    var n = casa[modo] < 0 ? 0 : (datosDe(modo, casa[modo]).cantidades[id] || 0);
+    campos[id].input.value = n > 0 ? String(n) : "";
+  }
+
+  $("contexto").addEventListener("input", function () {
+    if (modo !== "accion" || casa.accion < 0) return;
+    datosDe("accion", casa.accion).contexto = $("contexto").value;
+  });
+
+  /* ---------- Bestias ---------- */
+  function pintarBestias(enfocar) {
+    var lista = datosDe(modo, casa[modo]).bestias;
+    var ul = $("bestias");
+    ul.textContent = "";
+    $("sin-bestias").hidden = lista.length > 0;
+
+    lista.forEach(function (b, i) {
+      var esDragon = (b.tipo === "dragon");
+      var titulo = (esDragon ? "Dragón" : "Gusano de fuego");
+      var li = crear("li", "bestia");
+
+      var nombre = crear("span", "b-nombre");
+      var e = crear("span", "emoji", esDragon ? "🐉" : "🪱");
+      e.setAttribute("aria-hidden", "true");
+      nombre.appendChild(e);
+      nombre.appendChild(crear("span", "", titulo));
+      li.appendChild(nombre);
+
+      var nivel = document.createElement("select");
+      nivel.setAttribute("aria-label", "Nivel de " + titulo.toLowerCase() + " " + (i + 1));
+      [1, 2, 3, 4].forEach(function (n) {
+        var o = crear("option", "", "Nivel " + n);
+        o.value = String(n);
+        nivel.appendChild(o);
+      });
+      nivel.value = String(b.nivel);
+      nivel.addEventListener("change", function () { b.nivel = Number(nivel.value); });
+      li.appendChild(nivel);
+
+      if (esDragon) {
+        var arm = document.createElement("select");
+        arm.setAttribute("aria-label", "Armadura de dragón " + (i + 1));
+        ARMADURAS.forEach(function (a) {
+          var o = crear("option", "", a[1]);
+          o.value = a[0];
+          arm.appendChild(o);
+        });
+        arm.value = b.armadura;
+        arm.addEventListener("change", function () { b.armadura = arm.value; });
+        li.appendChild(arm);
+      } else {
+        li.appendChild(crear("span"));
+      }
+
+      var quitar = crear("button", "boton-suave", "Quitar");
+      quitar.type = "button";
+      quitar.setAttribute("aria-label", "Quitar " + titulo.toLowerCase() + " " + (i + 1));
+      quitar.addEventListener("click", function () {
+        lista.splice(i, 1);
+        pintarBestias(-1);
+        $(esDragon ? "mas-dragon" : "mas-gusano").focus();
+      });
+      li.appendChild(quitar);
+
+      ul.appendChild(li);
+      if (i === enfocar) nivel.focus();
+    });
+  }
+
+  function nuevaBestia(tipo) {
+    if (casa[modo] < 0) return;
+    var lista = datosDe(modo, casa[modo]).bestias;
+    lista.push({ tipo: tipo, nivel: 1, armadura: "ninguna" });
+    pintarBestias(lista.length - 1);
+  }
+  $("mas-dragon").addEventListener("click", function () { nuevaBestia("dragon"); });
+  $("mas-gusano").addEventListener("click", function () { nuevaBestia("gusano"); });
+
+  /* ---------- Pantalla de un bando ---------- */
+  function abrirBando(bando) {
+    modo = bando;
+    var idx = casa[bando];
+    var d = datosDe(bando, idx);
+    var defensa = (bando === "defensa");
+
+    // Cabecera
+    $("papel").textContent = defensa ? "Se defiende" : "Hace la acción";
+    var h = $("mi-casa");
+    h.textContent = "";
+    var e = crear("span", "", CASAS[idx][0]);
+    e.setAttribute("aria-hidden", "true");
+    h.appendChild(e);
+    h.appendChild(crear("span", "", CASAS[idx][1]));
+
+    // Contexto: se escribe en la acción y solo se lee en la defensa
+    $("bloque-escribir").hidden = defensa;
+    $("bloque-leer").hidden = !defensa;
+    if (defensa) {
+      $("leer-ayuda").textContent = "Es el que se escribió para la acción de " + nombreCasa(casa.accion) + ".";
+      pintarContextoLeido($("contexto-leido"));
+    } else {
+      $("contexto").value = d.contexto;
+    }
+
+    // Cantidades
+    $("titulo-cosas").textContent = defensa ? "Qué tiene para defenderse" : "Qué tiene en esta acción";
+    $("ayuda-cosas").textContent = defensa
+      ? "Pon solo las defensas que pueden intervenir. Lo que no, déjalo vacío."
+      : "Pon solo lo que participa en esta acción y puede actuar. Lo que no, déjalo vacío.";
+    Object.keys(campos).forEach(function (id) {
+      var n = d.cantidades[id] || 0;
+      campos[id].input.value = n > 0 ? String(n) : "";
+      campos[id].fila.classList.toggle("con-cantidad", n > 0);
+    });
+    pintarBestias(-1);
+
+    // Pie
+    $("seguir").textContent = defensa ? "Seguir al cálculo de ventajas" : "Seguir a la casa defensora";
+    $("volver-accion").hidden = !defensa;
+    if (defensa) $("volver-accion").textContent = "Volver a " + nombreCasa(casa.accion);
+
+    mostrar("accion", h);
+  }
+
+  function pintarContextoLeido(caja) {
+    var texto = datosDe("accion", casa.accion).contexto.trim();
+    if (texto) {
+      caja.textContent = texto;
+      caja.classList.remove("sin-contexto");
+    } else {
+      caja.textContent = "Aún no hay contexto. Se escribe en la pantalla de " + nombreCasa(casa.accion) + ".";
+      caja.classList.add("sin-contexto");
+    }
+  }
+
+  $("cambiar").addEventListener("click", function () { abrirSelector(modo); });
+
+  $("seguir").addEventListener("click", function () {
+    if (modo === "defensa") abrirCalculo();
+    else if (casa.defensa >= 0) abrirBando("defensa");
+    else abrirSelector("defensa");
+  });
+
+  $("volver-accion").addEventListener("click", function () { abrirBando("accion"); });
+
+  /* =====================================================================
+     CÁLCULO DE VENTAJAS
+     ===================================================================== */
+  function objetivoActual() {
+    for (var i = 0; i < REGLAS.objetivos.length; i++) {
+      if (REGLAS.objetivos[i][0] === calculo.objetivo) return REGLAS.objetivos[i];
+    }
+    return REGLAS.objetivos[0];
+  }
+
+  // Fuerza efectiva de un bando: { total, filas: [[texto, valor]], notas: [] }
+  function fuerzaDe(bando) {
+    var tipo = calculo.tipo;
+    var filas = [];
+    var notas = [];
+    var total = 0;
+    function suma(texto, valor) { filas.push([texto, valor]); total += valor; }
+
+    // En un asedio, lo que se opone es la resistencia del objetivo
+    if (bando === "defensa" && tipo === "estructura") {
+      var o = objetivoActual();
+      suma(o[1], o[2]);
+      return { total: total, filas: filas, notas: ["En un asedio se opone la resistencia del objetivo."] };
+    }
+
+    var d = datosDe(bando, casa[bando]);
+    function c(id) { return d.cantidades[id] || 0; }
+    var fuera = [];   // lo que tiene pero no cuenta en este tipo de acción
+
+    // Tropas: solo en tierra
+    var hayTropas = c("soldado") + c("mercenarios") + c("caballos") + c("escudo") > 0;
+    if (tipo === "tierra") {
+      var conArma = Math.min(c("soldado"), c("armas"));
+      var sinArma = c("soldado") - conArma;
+      if (conArma) suma(fmt(conArma) + (conArma === 1 ? " soldado con arma" : " soldados con arma") + " × " + fmt(REGLAS.soldado), conArma * REGLAS.soldado);
+      if (sinArma) notas.push(fmt(sinArma) + (sinArma === 1 ? " soldado sin arma no cuenta." : " soldados sin arma no cuentan."));
+      if (c("mercenarios")) suma(fmt(c("mercenarios")) + (c("mercenarios") === 1 ? " mercenario" : " mercenarios") + " × " + fmt(REGLAS.mercenario), c("mercenarios") * REGLAS.mercenario);
+
+      var combatientes = conArma + c("mercenarios");
+      var jinetes = Math.min(c("caballos"), c("montura-caballo"), combatientes);
+      if (jinetes) suma(fmt(jinetes) + " a caballo × " + fmt(REGLAS.caballeria), jinetes * REGLAS.caballeria);
+      if (c("caballos") > jinetes) notas.push(fmt(c("caballos") - jinetes) + " caballos sin montura o sin jinete no cuentan.");
+
+      var escudos = Math.min(c("escudo"), combatientes);
+      if (escudos) suma(fmt(escudos) + " con escudo × " + fmt(REGLAS.escudo), escudos * REGLAS.escudo);
+      if (c("escudo") > escudos) notas.push(fmt(c("escudo") - escudos) + " escudos sin portador no cuentan.");
+    } else if (hayTropas) {
+      fuera.push("las tropas");
+    }
+
+    // Máquinas: en tierra, contra vuelo y contra estructuras
+    var maquinasSinValor = [];
+    var hayMaquinas = false;
+    Object.keys(REGLAS.maquinas).forEach(function (id) {
+      var n = c(id);
+      if (!n) return;
+      hayMaquinas = true;
+      if (tipo === "naval") return;
+      var v = REGLAS.maquinas[id][tipo];
+      if (v) suma(fmt(n) + " " + NOMBRE[id] + " × " + fmt(v), n * v);
+      else maquinasSinValor.push(NOMBRE[id]);
+    });
+    if (tipo === "naval" && hayMaquinas) fuera.push("las máquinas");
+    if (maquinasSinValor.length) notas.push("No sirven en este tipo de acción: " + maquinasSinValor.join(", ") + ".");
+
+    // Barcos: fuerza naval, o armas antidragón contra bestias en vuelo
+    var barcosSinValor = [];
+    var hayBarcos = false;
+    Object.keys(REGLAS.barcos).forEach(function (id) {
+      var n = c(id);
+      if (!n) return;
+      hayBarcos = true;
+      if (tipo !== "naval" && tipo !== "vuelo") return;
+      var v = REGLAS.barcos[id][tipo];
+      if (v) suma(fmt(n) + " " + NOMBRE[id] + " × " + fmt(v) + (tipo === "vuelo" ? " antidragón" : ""), n * v);
+      else barcosSinValor.push(NOMBRE[id]);
+    });
+    if ((tipo === "tierra" || tipo === "estructura") && hayBarcos) fuera.push("los barcos");
+    if (barcosSinValor.length) notas.push("Sin armas antidragón de serie: " + barcosSinValor.join(", ") + ".");
+
+    // Bestias: cuentan en cualquier tipo de acción
+    d.bestias.forEach(function (b) {
+      var base = REGLAS[b.tipo][b.nivel];
+      var pct = (b.tipo === "dragon") ? REGLAS.armadura[b.armadura] : 0;
+      var texto = (b.tipo === "dragon" ? "Dragón" : "Gusano de fuego") + " nivel " + b.nivel;
+      if (pct) texto += " con " + ARMADURA_TEXTO[b.armadura] + " (+" + pct + " %)";
+      suma(texto, base * (100 + pct) / 100);
+    });
+
+    if (fuera.length) notas.push("No cuentan en este tipo de acción: " + fuera.join(" ni ") + ".");
+    return { total: Math.round(total * 10) / 10, filas: filas, notas: notas };
+  }
+
+  // Modificador por fuerzas, visto desde la casa que hace la acción
+  function modFuerzas(fa, fd) {
+    if (fa <= 0 && fd <= 0) return { mod: 0, caso: "nada" };
+    if (fd <= 0) return { mod: REGLAS.sinOposicion, caso: "sin-oposicion" };
+    if (fa <= 0) return { mod: -REGLAS.sinOposicion, caso: "sin-fuerza" };
+    var mayor = Math.max(fa, fd);
+    var menor = Math.min(fa, fd);
+    var sup = Math.round((mayor / menor - 1) * 100 * 1e6) / 1e6;
+    var m = 0;
+    REGLAS.superioridad.forEach(function (corte) { if (sup >= corte) m += 1; });
+    return { mod: fa >= fd ? m : -m, sup: sup, caso: m === 0 ? "parejo" : (fa >= fd ? "accion" : "defensa") };
+  }
+
+  function modificadores() {
+    var fa = fuerzaDe("accion");
+    var fd = fuerzaDe("defensa");
+    var mf = modFuerzas(fa.total, fd.total);
+    var bruto = 0;
+    Object.keys(calculo.condiciones).forEach(function (id) { bruto += calculo.condiciones[id]; });
+    var contexto = Math.max(-REGLAS.limiteContexto, Math.min(REGLAS.limiteContexto, bruto));
+    var total = Math.max(-REGLAS.limiteTotal, Math.min(REGLAS.limiteTotal, mf.mod + contexto));
+    return { fa: fa, fd: fd, mf: mf, bruto: bruto, contexto: contexto, fuerzas: mf.mod, total: total };
+  }
+
+  /* ---------- Pantalla del cálculo ---------- */
+  function radio(grupo, valor, texto, marcado, alCambiar) {
+    var l = crear("label", "opcion");
+    var inp = document.createElement("input");
+    inp.type = "radio";
+    inp.name = grupo;
+    inp.value = valor;
+    inp.checked = marcado;
+    inp.addEventListener("change", function () { if (inp.checked) alCambiar(valor); });
+    l.appendChild(inp);
+    l.appendChild(crear("span", "", texto));
+    return l;
+  }
+
+  (function () {
+    TIPOS.forEach(function (t) {
+      $("tipos").appendChild(radio("tipo", t[0], t[1], t[0] === calculo.tipo, function (v) {
+        calculo.tipo = v;
+        pintarCalculo();
+      }));
+    });
+    REGLAS.objetivos.forEach(function (o) {
+      $("objetivos").appendChild(radio("objetivo", o[0], o[1] + " (" + fmt(o[2]) + ")", o[0] === calculo.objetivo, function (v) {
+        calculo.objetivo = v;
+        pintarCalculo();
+      }));
+    });
+
+    // Condiciones: cada una con sus botones de valor
+    CONDICIONES.forEach(function (cnd) {
+      var id = cnd[0];
+      var li = crear("li", "condicion");
+      li.setAttribute("data-cond", id);
+      li.appendChild(crear("span", "", cnd[1]));
+      var chips = crear("div", "chips");
+      cnd[2].forEach(function (valor, k) {
+        var texto = conSigno(valor) + (cnd[3] ? " " + cnd[3][k] : "");
+        var b = crear("button", "chip", texto);
+        b.type = "button";
+        b.setAttribute("data-valor", String(valor));
+        b.setAttribute("aria-pressed", "false");
+        b.setAttribute("aria-label", cnd[1] + ", " + texto);
+        b.addEventListener("click", function () {
+          if (calculo.condiciones[id] === valor) delete calculo.condiciones[id];
+          else calculo.condiciones[id] = valor;
+          pintarCalculo();
+        });
+        chips.appendChild(b);
+      });
+      li.appendChild(chips);
+      $(cnd[2][0] > 0 ? "cond-favor" : "cond-contra").appendChild(li);
+    });
+  })();
+
+  function pintarFuerza(id, bando, f) {
+    var caja = $(id);
+    caja.textContent = "";
+    caja.appendChild(crear("h4", "", nombreCasa(casa[bando])));
+    caja.appendChild(crear("div", "grande", fmt(f.total)));
+    if (f.filas.length) {
+      var ul = crear("ul", "desglose");
+      f.filas.forEach(function (fila) {
+        var li = document.createElement("li");
+        li.appendChild(crear("span", "", fila[0]));
+        li.appendChild(crear("span", "valor", fmt(fila[1])));
+        ul.appendChild(li);
+      });
+      caja.appendChild(ul);
+    } else {
+      caja.appendChild(crear("p", "nota", "Nada de lo que tiene suma fuerza en este tipo de acción."));
+    }
+    f.notas.forEach(function (n) { caja.appendChild(crear("p", "nota", n)); });
+  }
+
+  function pintarCalculo() {
+    var m = modificadores();
+    var a = nombreCasa(casa.accion);
+    var d = nombreCasa(casa.defensa);
+
+    // Tipo de acción
+    TIPOS.forEach(function (t) { if (t[0] === calculo.tipo) $("tipo-ayuda").textContent = t[2]; });
+    $("objetivo-caja").hidden = (calculo.tipo !== "estructura");
+
+    // Fuerzas
+    pintarFuerza("fuerza-accion", "accion", m.fa);
+    pintarFuerza("fuerza-defensa", "defensa", m.fd);
+    var frase;
+    var contra = (calculo.tipo === "estructura") ? "al objetivo" : "a " + d;
+    if (m.mf.caso === "nada") frase = "Ningún bando tiene fuerza efectiva en este tipo de acción";
+    else if (m.mf.caso === "sin-oposicion") frase = a + " no tiene oposición efectiva";
+    else if (m.mf.caso === "sin-fuerza") frase = a + " no tiene fuerza efectiva para esta acción";
+    else if (m.mf.caso === "parejo") frase = "La diferencia de fuerzas es menor del 25 %";
+    else if (m.mf.caso === "accion") frase = a + " supera " + contra + " en un " + fmt(Math.floor(m.mf.sup)) + " %";
+    else frase = (calculo.tipo === "estructura" ? "El objetivo" : d) + " supera a " + a + " en un " + fmt(Math.floor(m.mf.sup)) + " %";
+    $("superioridad").textContent = frase + ": modificador por fuerzas " + conSigno(m.fuerzas) + ".";
+
+    // Condiciones
+    $("cond-ayuda").textContent = "Marca las que el árbitro da por válidas para " + a +
+      ". No cuentes dos veces la misma ventaja. El contexto se limita entre −" + REGLAS.limiteContexto + " y +" + REGLAS.limiteContexto + ".";
+    pintarContextoLeido($("calc-contexto"));
+    var filas = document.querySelectorAll(".condicion");
+    for (var i = 0; i < filas.length; i++) {
+      var elegido = calculo.condiciones[filas[i].getAttribute("data-cond")];
+      filas[i].classList.toggle("activa", elegido !== undefined);
+      var chips = filas[i].querySelectorAll(".chip");
+      for (var k = 0; k < chips.length; k++) {
+        chips[k].setAttribute("aria-pressed", String(Number(chips[k].getAttribute("data-valor")) === elegido));
+      }
+    }
+    $("contexto-suma").textContent = "Modificador por contexto " + conSigno(m.contexto) +
+      (m.bruto !== m.contexto ? " (las condiciones suman " + conSigno(m.bruto) + ", se limita a " + conSigno(m.contexto) + ")." : ".");
+
+    // Total
+    $("total-numero").textContent = conSigno(m.total);
+    $("total-detalle").textContent = "Fuerzas " + conSigno(m.fuerzas) + ", contexto " + conSigno(m.contexto) + ". " + fraseExito(m.total, a);
+  }
+
+  function abrirCalculo() {
+    $("calc-titulo").textContent = nombreCasa(casa.accion) + " contra " + nombreCasa(casa.defensa);
+    $("volver-calculo").textContent = "Volver a " + nombreCasa(casa.defensa);
+    pintarCalculo();
+    mostrar("calculo", $("calc-titulo"));
+  }
+
+  $("volver-calculo").addEventListener("click", function () { abrirBando("defensa"); });
+  $("seguir-dado").addEventListener("click", function () { abrirDado(); });
+
+  /* =====================================================================
+     EL DADO
+     ===================================================================== */
+  var ZONAS = {
+    total0: { nombre: "Humillación total", zona: "humillacion",
+      detalle: "Derrota total de la acción: se pierde todo lo comprometido, o retirada completa si el contexto lo exige." },
+    humillacion: { nombre: "Humillación", zona: "humillacion",
+      detalle: "La acción sale catastróficamente mal. Pierde todo lo que arriesgó y además queda en desventaja." },
+    fallo: { nombre: "Fallo", zona: "fallo",
+      detalle: "La acción no funciona. No logra su objetivo, aunque sin consecuencias desastrosas." },
+    exito: { nombre: "Éxito", zona: "exito",
+      detalle: "La acción sale bien. Consigue lo que buscaba." },
+    critico: { nombre: "Crítico", zona: "critico",
+      detalle: "La acción sale perfecta. Logra su objetivo con un resultado superior al esperado." },
+    total20: { nombre: "Victoria total", zona: "critico",
+      detalle: "Victoria total dentro del objetivo y el alcance aprobados." }
+  };
+  var ORDEN = ["humillacion", "fallo", "exito", "critico"];
+  var EXITO_BASE = 11;    // en igualdad de condiciones, el éxito empieza en 11
+
+  var tirando = false;
+  var tiradas = 0;
+  var firmaTirada = "";   // con qué datos salió el resultado que se ve
+  var modDado = 0;        // modificador con el que está pintada la barra
+  var celdas = [];
+
+  // Rangos normales, en igualdad de condiciones
+  function zonaDe(n) {
+    if (n <= 5) return "humillacion";
+    if (n <= 10) return "fallo";
+    if (n <= 15) return "exito";
+    return "critico";
+  }
+
+  // El número del dado NO cambia: lo que se mueve son los rangos.
+  // Con ventaja +2, cada rango empieza 2 casillas antes (éxito desde 9);
+  // con desventaja −3, 3 casillas después (éxito desde 14).
+  // Esta función dice a qué casilla de la escala normal equivale una tirada,
+  // y con eso se sabe su resultado y su fila en la tabla de pérdidas.
+  // El 0 y el 20 naturales no se mueven nunca.
+  function equivalente(natural, mod) {
+    if (natural === 0 || natural === 20) return natural;
+    return Math.max(1, Math.min(19, natural + mod));
+  }
+  function categoriaDe(natural, mod) {
+    if (natural === 0) return "total0";
+    if (natural === 20) return "total20";
+    return zonaDe(equivalente(natural, mod));
+  }
+  function zonaCelda(n, mod) { return ZONAS[categoriaDe(n, mod)].zona; }
+  function exitoDesde(mod) { return Math.max(1, Math.min(19, EXITO_BASE - mod)); }
+
+  function fraseExito(mod, quien) {
+    if (mod === 0) return "El éxito de " + quien + " empieza en " + EXITO_BASE + ", como en igualdad de condiciones.";
+    return "El éxito de " + quien + " empieza en " + exitoDesde(mod) + " en vez de " + EXITO_BASE + ".";
+  }
+
+  function dado() {
+    // Los 21 números (0 a 20) salen con la misma probabilidad
+    if (window.crypto && window.crypto.getRandomValues) {
+      var buf = new Uint8Array(1);
+      do { window.crypto.getRandomValues(buf); } while (buf[0] >= 252);
+      return buf[0] % 21;
+    }
+    return Math.floor(Math.random() * 21);
+  }
+
+  function firmaActual() { return JSON.stringify([casa, datos.accion[casa.accion], datos.defensa[casa.defensa], calculo]); }
+
+  /* Textos del resultado, apilados en el mismo hueco */
+  function llenarPila(id, textos) {
+    var caja = $(id);
+    Object.keys(textos).forEach(function (clave) {
+      var s = crear("span", "", textos[clave]);
+      s.setAttribute("data-clave", clave);
+      caja.appendChild(s);
+    });
+  }
+  function verPila(id, clave) {
+    var hijos = $(id).children;
+    for (var i = 0; i < hijos.length; i++) {
+      hijos[i].classList.toggle("visible", hijos[i].getAttribute("data-clave") === clave);
+    }
+  }
+
+  (function () {
+    var pista = $("pista");
+    for (var n = 0; n <= 20; n++) {
+      var d = crear("div", "", String(n));
+      pista.appendChild(d);
+      celdas.push(d);
+    }
+
+    var nombres = { inicio: "Aún no se ha tirado", tirando: "Tirando…" };
+    var detalles = { inicio: "El dado va del 0 al 20." };
+    Object.keys(ZONAS).forEach(function (z) {
+      nombres[z] = ZONAS[z].nombre;
+      detalles[z] = ZONAS[z].detalle;
+    });
+    llenarPila("veredicto", nombres);
+    llenarPila("detalle", detalles);
+  })();
+
+  // La barra se pinta con los rangos ya movidos por el modificador
+  function pintarPista(marcada) {
+    for (var n = 0; n <= 20; n++) {
+      celdas[n].className = "celda z-" + zonaCelda(n, modDado) + (n === marcada ? " aqui" : "");
+    }
+  }
+
+  function pintarLeyenda() {
+    var ul = $("leyenda");
+    ul.textContent = "";
+    ORDEN.forEach(function (z) {
+      var desde = -1;
+      var hasta = -1;
+      for (var n = 0; n <= 20; n++) {
+        if (zonaCelda(n, modDado) !== z) continue;
+        if (desde < 0) desde = n;
+        hasta = n;
+      }
+      var li = crear("li", "z-" + z);
+      var caja = document.createElement("div");
+      caja.appendChild(crear("b", "", ZONAS[z].nombre));
+      caja.appendChild(document.createTextNode(" "));
+      caja.appendChild(crear("span", "", desde < 0 ? "ninguno" : (desde === hasta ? String(desde) : desde + " a " + hasta)));
+      li.appendChild(caja);
+      ul.appendChild(li);
+    });
+  }
+
+  function reiniciarResultado() {
+    $("dado-numero").textContent = "–";
+    $("veredicto").className = "veredicto pila";
+    verPila("veredicto", "inicio");
+    verPila("detalle", "inicio");
+    $("con-que").textContent = "";
+    $("dado-anuncio").textContent = "";
+    $("perdidas").hidden = true;
+    firmaTirada = "";
+    pintarPista(-1);
+  }
+
+  function abrirDado() {
+    var m = modificadores();
+    if (firmaTirada && firmaTirada !== firmaActual()) reiniciarResultado();
+    var cambio = (m.total !== modDado);
+    modDado = m.total;
+    if (cambio || !firmaTirada) pintarPista(-1);
+    pintarLeyenda();
+    $("dado-titulo").textContent = nombreCasa(casa.accion) + " contra " + nombreCasa(casa.defensa);
+    $("mod-linea").textContent = "Modificador de " + nombreCasa(casa.accion) + ": " + conSigno(m.total) +
+      " (fuerzas " + conSigno(m.fuerzas) + ", contexto " + conSigno(m.contexto) + "). " +
+      (m.total === 0 ? "El éxito empieza en " + EXITO_BASE + "." : "El éxito empieza en " + exitoDesde(m.total) + " en vez de " + EXITO_BASE + ".");
+    mostrar("dado", $("dado-titulo"));
+  }
+
+  function bloquear(si) {
+    tirando = si;
+    $("tirar").disabled = si;
+    $("volver-dado").disabled = si;
+  }
+
+  /* ---------- Pérdidas sugeridas ---------- */
+  function bajas(cantidad, pct) {
+    var r = REGLAS.redondeoTropas;
+    return Math.min(cantidad, Math.round(cantidad * pct / 100 / r) * r);
+  }
+
+  function pintarPerdida(id, bando, pct) {
+    var caja = $(id);
+    var d = datosDe(bando, casa[bando]);
+    caja.textContent = "";
+    caja.appendChild(crear("h4", "", nombreCasa(casa[bando])));
+    caja.appendChild(crear("div", "perdida-pct", "Pierde " + pct + " %"));
+
+    var ul = crear("ul", "desglose");
+    function fila(texto, valor) {
+      var li = document.createElement("li");
+      li.appendChild(crear("span", "", texto));
+      if (valor) li.appendChild(crear("span", "valor", valor));
+      ul.appendChild(li);
+    }
+
+    if (bando === "defensa" && calculo.tipo === "estructura") {
+      fila("Daño a " + objetivoActual()[1].toLowerCase(), pct + " %");
+    } else {
+      [["soldado", "Soldados"], ["mercenarios", "Mercenarios"]].forEach(function (t) {
+        var n = d.cantidades[t[0]] || 0;
+        if (!n) return;
+        var b = bajas(n, pct);
+        fila(t[1] + ": pierde " + fmt(b) + ", quedan " + fmt(n - b));
+      });
+      var resto = d.bestias.length > 0;
+      Object.keys(REGLAS.maquinas).concat(Object.keys(REGLAS.barcos)).forEach(function (k) {
+        if (d.cantidades[k]) resto = true;
+      });
+      if (resto) fila("Máquinas, barcos y bestias: " + pct + " % de daño, lo reparte el árbitro");
+    }
+    if (ul.children.length) caja.appendChild(ul);
+    else caja.appendChild(crear("p", "nota", "No tiene tropas ni equipo anotados."));
+  }
+
+  /* ---------- Tirada ---------- */
+  function fijarResultado(natural, mod) {
+    var cat = categoriaDe(natural, mod);
+    var eq = equivalente(natural, mod);
+    tiradas += 1;
+    firmaTirada = firmaActual();
+    $("dado-numero").textContent = natural;
+    $("veredicto").className = "veredicto pila z-" + ZONAS[cat].zona;
+    verPila("veredicto", cat);
+    verPila("detalle", cat);
+
+    var como;
+    if (natural === 0) como = "Un 0 natural es humillación total aunque haya ventajas.";
+    else if (natural === 20) como = "Un 20 natural es victoria total aunque haya desventajas.";
+    else if (mod === 0) como = "Sin ventajas ni desventajas, los rangos son los normales.";
+    else if (mod > 0) como = "Por la ventaja de " + conSigno(mod) + ", cada rango empieza " + mod + (mod === 1 ? " casilla antes." : " casillas antes.");
+    else como = "Por la desventaja de " + conSigno(mod) + ", cada rango empieza " + (-mod) + (mod === -1 ? " casilla después." : " casillas después.");
+    $("con-que").textContent = como;
+
+    pintarPista(natural);
+
+    // La tabla de pérdidas se lee en la casilla equivalente de la escala normal
+    var p = REGLAS.perdidas[eq];
+    $("equivale").textContent = (eq !== natural)
+      ? "Con el modificador " + conSigno(mod) + ", este " + natural + " equivale a un " + eq + " de la tabla de pérdidas."
+      : "";
+    $("equivale").hidden = (eq === natural);
+    pintarPerdida("perd-accion", "accion", p[0]);
+    pintarPerdida("perd-defensa", "defensa", p[1]);
+    $("perdidas").hidden = false;
+
+    $("dado-anuncio").textContent = "Tirada " + tiradas + ": salió " + natural + ", " + ZONAS[cat].nombre + ".";
+  }
+
+  $("tirar").addEventListener("click", function () {
+    if (tirando) return;
+    var natural = dado();
+    var mod = modDado;
+    var quieto = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (quieto) { fijarResultado(natural, mod); return; }
+
+    bloquear(true);
+    $("perdidas").hidden = true;
+    $("veredicto").className = "veredicto pila";
+    verPila("veredicto", "tirando");
+    verPila("detalle", null);
+    $("con-que").textContent = "";
+
+    // Empieza rápido y va frenando: cada salto dura más que el anterior
+    // (unos 4 segundos en total) hasta quedarse en el número que salió.
+    var SALTOS = 18;        // números de mentira antes del real
+    var FRENADO = 1.14;     // cuánto se alarga cada salto
+    var salto = 0;
+    var espera = 55;        // milisegundos del primer salto
+    var anterior = -1;
+    (function saltar() {
+      if (salto >= SALTOS) {
+        bloquear(false);
+        fijarResultado(natural, mod);
+        if (document.activeElement === document.body) $("tirar").focus();
+        return;
+      }
+      var falso;
+      do {
+        falso = Math.floor(Math.random() * 21);
+      } while (falso === anterior || (salto === SALTOS - 1 && falso === natural));
+      anterior = falso;
+      $("dado-numero").textContent = falso;
+      pintarPista(falso);
+      salto += 1;
+      espera *= FRENADO;
+      setTimeout(saltar, espera);
+    })();
+  });
+
+  $("volver-dado").addEventListener("click", function () {
+    if (tirando) return;
+    abrirCalculo();
+  });
+
+  pintarLeyenda();
+  reiniciarResultado();
+})();
+</script>
+</body>
+</html>
